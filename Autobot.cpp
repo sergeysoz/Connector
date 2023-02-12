@@ -89,28 +89,31 @@ int main()
 	WORD iError, cbErrorMsg;
 	DWORD fErrorCode;
 
-	LPWSTR buffer[2056];
-	LPWSTR buffer2 = (WCHAR*)malloc(32 * sizeof(WCHAR));
+	// LPWSTR buffer[1024];
+	// LPWSTR - pointer to LPSTR
+	// LPSTR - character type
+	LPWSTR buffer2 = (LPWSTR)malloc(512 * sizeof(LPSTR));
 	//printf("%s\n", pszOperation);
-	for (iError = 1; iError <= 8; iError++)
+	for (int iError = 1; iError <= 8; iError++)
 	{
 		rc = ::SQLInstallerError(
 			iError,
 			&fErrorCode,
+			//(LPWSTR)&buffer,
 			buffer2,
-			sizeof(buffer),
+			512 * sizeof(LPSTR),
 			&cbErrorMsg
 		);
 		if (rc == SQL_NO_DATA || rc == SQL_ERROR)
 		{
 			break;
 		}
-		//printf("%d: Error code = %d, Message = %s\n",
-		//	iError,
-		//	fErrorCode,
-		//	(void*)&buffer2
-		//);
-		cout << fErrorCode << ": " << buffer2 << endl;
+		printf("%d: Error code = %d, Message = %ws\n",
+			iError,
+			fErrorCode,
+			buffer2
+		);
+		//cout << fErrorCode << ": " << *buffer << endl;
 	}
 
 	//system("pause");
